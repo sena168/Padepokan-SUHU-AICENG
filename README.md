@@ -1,73 +1,140 @@
-# Welcome to your Lovable project
+# Padepokan SUHU AICENG
 
-## Project info
+Padepokan SUHU AICENG adalah platform edukasi untuk pembelajaran AI dan pengembangan keterampilan prompting yang terstruktur.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🚀 Tentang Proyek
 
-## How can I edit this code?
+**Padepokan SUHU AICENG** adalah aplikasi web yang dibangun untuk membantu pengguna menguasai teknik prompting AI melalui pendekatan bertahap dan terstruktur. Platform ini menawarkan berbagai kitab pembelajaran dengan sistem pelacakan progres yang komprehensif.
 
-There are several ways of editing your application.
+## 🛠️ Teknologi yang Digunakan
 
-**Use Lovable**
+- **Frontend Framework**: React 18 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Routing**: React Router DOM
+- **Authentication**: Google OAuth 2.0
+- **Deployment**: Vercel
+- **State Management**: React Context API
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## 📋 Fitur Utama
 
-Changes made via Lovable will be committed automatically to this repo.
+### ✅ Sudah Diimplementasikan
 
-**Use your preferred IDE**
+- **Sistem Autentikasi**: Login dengan Google OAuth
+- **Manajemen Pengguna**: Penyimpanan lokal dengan localStorage
+- **Kitab Pembelajaran**: 3 kitab pembelajaran dengan konten terstruktur
+- **Pelacakan Progres**: Sistem pelacakan penyelesaian kitab
+- **Dashboard Pengguna**: Tampilan progres dan statistik
+- **Error Handling**: Error boundaries dan penanganan kesalahan yang komprehensif
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 🔄 Dalam Pengembangan
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Backend untuk penyimpanan data pengguna
+- Sistem database yang aman
+- Fitur backup data
 
-Follow these steps:
+## 🚀 Cara Menjalankan Proyek
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Prasyarat
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Node.js (versi 18 atau lebih tinggi)
+- npm atau bun
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Langkah-langkah
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+1. **Clone repository**
+
+   ```bash
+   git clone https://github.com/sena168/Padepokaan-SUHU-AICENG.git
+   cd Padepokaan-SUHU-AICENG
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Setup environment variables**
+
+   - Salin `.env.example` menjadi `.env`
+   - Isi variabel lingkungan yang diperlukan:
+     ```
+     VITE_GOOGLE_CLIENT_ID=your_google_client_id
+     VITE_GOOGLE_CLIENT_SECRET=your_google_client_secret
+     SEEDREAM_API_KEY=your_seedream_api_key
+     ```
+
+4. **Jalankan development server**
+
+   ```bash
+   npm run dev
+   ```
+
+   Aplikasi akan berjalan di http://localhost:168
+
+5. **Build untuk production**
+   ```bash
+   npm run build
+   ```
+
+## 📁 Struktur Proyek
+
+```
+src/
+├── components/          # Komponen UI yang dapat digunakan kembali
+├── contexts/           # React contexts untuk state management
+├── pages/              # Halaman aplikasi
+├── utils/              # Utility functions
+├── lib/                # Konfigurasi library
+└── assets/             # Aset statis
+
+externals/
+├── AI_INSTRUCTIONS.md  # Panduan interaksi AI
+├── plan.md            # Rencana pengembangan
+├── progress-log.md     # Log progres pengembangan
+├── debug-log.md       # Log debugging
+├── urgent-prompt-list.md # Daftar tugas prioritas
+└── external-notes.md  # Catatan konfigurasi dan rahasia
 ```
 
-**Edit a file directly in GitHub**
+## 🔐 Keamanan
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- Semua rahasia disimpan dalam file `.env` yang tidak di-track oleh Git
+- File `.gitignore` sudah dikonfigurasi dengan benar untuk mengecualikan file sensitif
+- Autentikasi menggunakan Google OAuth dengan token exchange yang aman
 
-**Use GitHub Codespaces**
+## 🌐 Deployment
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Proyek ini dideploy menggunakan **Vercel** dan dapat diakses di:
+**https://padepokaan-suhu-aiceng.vercel.app/**
 
-## What technologies are used for this project?
+### Konfigurasi Deployment
 
-This project is built with:
+- Build command: `npm run build`
+- Output directory: `dist`
+- Environment variables dikonfigurasi di dashboard Vercel
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🤝 Kontribusi
 
-## How can I deploy this project?
+Untuk berkontribusi pada proyek ini:
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+1. Fork repository
+2. Buat branch fitur (`git checkout -b feature/AmazingFeature`)
+3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
+4. Push ke branch (`git push origin feature/AmazingFeature`)
+5. Buat Pull Request
 
-## Can I connect a custom domain to my Lovable project?
+## 📞 Kontak
 
-Yes, you can!
+- **Repository**: https://github.com/sena168/Padepokaan-SUHU-AICENG
+- **Deployment**: https://padepokaan-suhu-aiceng.vercel.app/
+- **Email**: suhuac3ng@gmail.com
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 📄 Lisensi
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Proyek ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) untuk detail lebih lanjut.
+
+---
+
+**Padepokan SUHU AICENG** - Menenun Sutra Digital 🎯

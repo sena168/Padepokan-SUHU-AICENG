@@ -1,0 +1,26 @@
+{
+  "name": "padepokan-suhu-aiceng-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Padepokan SUHU AICENG",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'No build step required'",
+    "backup": "node backup.js create",
+    "backup:list": "node backup.js list",
+    "backup:restore": "node backup.js restore"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.6",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
