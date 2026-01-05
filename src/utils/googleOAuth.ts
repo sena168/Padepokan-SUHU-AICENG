@@ -24,52 +24,86 @@ export class GoogleOAuth {
   }
 
   static async exchangeCodeForToken(code: string): Promise<GoogleUser> {
-    // Exchange authorization code for access token
-    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        client_id: this.clientId,
-        client_secret: import.meta.env.VITE_GOOGLE_CLIENT_SECRET,
-        code: code,
-        grant_type: 'authorization_code',
-        redirect_uri: this.redirectUri,
-      }),
-    });
-
-    if (!tokenResponse.ok) {
-      const errorData = await tokenResponse.text();
-      throw new Error(
-        `Token exchange failed: ${tokenResponse.status} - ${errorData}`
-      );
+    // Validate input
+    if (!code || typeof code !== 'string') {
+      throw new Error('Invalid authorization code');
     }
 
-    const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
+    if (!this.clientId || this.clientId === 'your_client_id_here') {
+      throw new Error('Google OAuth is not properly configured');
+    }
 
-    // Fetch user info using the access token
-    const userResponse = await fetch(
-      'https://www.googleapis.com/oauth2/v3/userinfo',
-      {
+    if (!import.meta.env.VITE_GOOGLE_CLIENT_SECRET) {
+      throw new Error('Google client secret is missing');
+    }
+
+    try {
+      // Exchange authorization code for access token
+      const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
+        body: new URLSearchParams({
+          client_id: this.clientId,
+          client_secret: import.meta.env.VITE_GOOGLE_CLIENT_SECRET,
+          code: code,
+          grant_type: 'authorization_code',
+          redirect_uri: this.redirectUri,
+        }),
+      });
+
+      if (!tokenResponse.ok) {
+        const errorData = await tokenResponse
+          .json()
+          .catch(() => ({ error: 'Unknown error' }));
+        throw new Error(
+          `Token exchange failed: ${tokenResponse.status} - ${
+            errorData.error || 'Authentication error'
+          }`
+        );
       }
-    );
 
-    if (!userResponse.ok) {
-      throw new Error('Failed to fetch user info');
+      const tokenData = await tokenResponse.json();
+      const accessToken = tokenData.access_token;
+
+      if (!accessToken) {
+        throw new Error('No access token received from Google');
+      }
+
+      // Fetch user info using the access token
+      const userResponse = await fetch(
+        'https://www.googleapis.com/oauth2/v3/userinfo',
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (!userResponse.ok) {
+        throw new Error(`Failed to fetch user info: ${userResponse.status}`);
+      }
+
+      const userInfo = await userResponse.json();
+
+      // Validate required user info fields
+      if (!userInfo.sub || !userInfo.email) {
+        throw new Error('Incomplete user information received from Google');
+      }
+
+      return {
+        id: userInfo.sub,
+        email: userInfo.email,
+        name: userInfo.name || 'Google User',
+        picture: userInfo.picture || '',
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Unexpected error during Google OAuth process');
     }
-
-    const userInfo = await userResponse.json();
-    return {
-      id: userInfo.sub,
-      email: userInfo.email,
-      name: userInfo.name,
-      picture: userInfo.picture,
-    };
   }
 
   static initiateLogin() {
