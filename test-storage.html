@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Padepokan SUHU AICENG - Storage Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a103d;
+            color: #f0f0f0;
+        }
+        .test-section {
+            background: #2a1f4d;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #059669;
+        }
+        .result {
+            background: #3a2f5d;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <h1>Padepokan SUHU AICENG - Storage Test</h1>
+    
+    <div class="test-section">
+        <h2>Authentication Storage Test</h2>
+        <button onclick="testAuthStorage()">Test Auth Storage</button>
+        <button onclick="clearAuthStorage()">Clear Auth Storage</button>
+        <div id="authResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Lesson Progress Storage Test</h2>
+        <button onclick="testLessonStorage()">Test Lesson Storage</button>
+        <button onclick="clearLessonStorage()">Clear Lesson Storage</button>
+        <div id="lessonResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Current Storage State</h2>
+        <button onclick="showCurrentStorage()">Show Current Storage</button>
+        <div id="currentStorage" class="result"></div>
+    </div>
+
+    <script>
+        function testAuthStorage() {
+            try {
+                // Clear any existing test data
+                localStorage.removeItem('padepokan_users');
+                localStorage.removeItem('padepokan_user');
+                
+                // Test user data
+                const testUser = {
+                    id: 'test-user-123',
+                    nickname: 'Test Murid',
+                    email: 'test@padepokan.com',
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Test saving user
+                localStorage.setItem('padepokan_user', JSON.stringify(testUser));
+                
+                // Test saving users array
+                const users = [testUser];
+                localStorage.setItem('padepokan_users', JSON.stringify(users));
+                
+                // Test reading back
+                const storedUser = localStorage.getItem('padepokan_user');
+                const storedUsers = localStorage.getItem('padepokan_users');
+                
+                const result = {
+                    userStored: !!storedUser,
+                    usersStored: !!storedUsers,
+                    userData: storedUser ? JSON.parse(storedUser) : null,
+                    usersData: storedUsers ? JSON.parse(storedUsers) : null
+                };
+                
+                document.getElementById('authResult').innerHTML = 
+                    '<span class="success">✅ Authentication Storage Test Successful!</span>\n' +
+                    'Stored User: ' + JSON.stringify(result.userData, null, 2) + '\n' +
+                    'Stored Users: ' + JSON.stringify(result.usersData, null, 2);
+                    
+            } catch (error) {
+                document.getElementById('authResult').innerHTML = 
+                    '<span class="error">❌ Error: ' + error.message + '</span>';
+            }
+        }
+
+        function testLessonStorage() {
+            try {
+                const userId = 'test-user-123';
+                const testLessons = [
+                    {
+                        id: 'kitab-kosong',
+                        title: 'Kitab Kosong',
+                        subtitle: 'Master Prompting',
+                        status: 'completed',
+                        content: {
+                            header: 'Test Header',
+                            body: 'Test Body'
+                        }
+                    }
+                ];
+                
+                // Test saving lessons
+                localStorage.setItem(`padepokan_lessons_${userId}`, JSON.stringify(testLessons));
+                
+                // Test reading back
+                const storedLessons = localStorage.getItem(`padepokan_lessons_${userId}`);
+                
+                const result = {
+                    lessonsStored: !!storedLessons,
+                    lessonsData: storedLessons ? JSON.parse(storedLessons) : null
+                };
+                
+                document.getElementById('lessonResult').innerHTML = 
+                    '<span class="success">✅ Lesson Storage Test Successful!</span>\n' +
+                    'Stored Lessons: ' + JSON.stringify(result.lessonsData, null, 2);
+                    
+            } catch (error) {
+                document.getElementById('lessonResult').innerHTML = 
+                    '<span class="error">❌ Error: ' + error.message + '</span>';
+            }
+        }
+
+        function clearAuthStorage() {
+            localStorage.removeItem('padepokan_users');
+            localStorage.removeItem('padepokan_user');
+            document.getElementById('authResult').innerHTML = 
+                '<span class="success">✅ Auth Storage Cleared</span>';
+        }
+
+        function clearLessonStorage() {
+            const userId = 'test-user-123';
+            localStorage.removeItem(`padepokan_lessons_${userId}`);
+            document.getElementById('lessonResult').innerHTML = 
+                '<span class="success">✅ Lesson Storage Cleared</span>';
+        }
+
+        function showCurrentStorage() {
+            const authUser = localStorage.getItem('padepokan_user');
+            const authUsers = localStorage.getItem('padepokan_users');
+            const userId = 'test-user-123';
+            const lessons = localStorage.getItem(`padepokan_lessons_${userId}`);
+            
+            const storage = {
+                'padepokan_user': authUser ? JSON.parse(authUser) : null,
+                'padepokan_users': authUsers ? JSON.parse(authUsers) : null,
+                'padepokan_lessons_test-user-123': lessons ? JSON.parse(lessons) : null
+            };
+            
+            document.getElementById('currentStorage').innerHTML =
+                'Current Storage State:\n' +
+                JSON.stringify(storage, null, 2);
+        }

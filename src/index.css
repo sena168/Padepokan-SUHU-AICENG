@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core palette: Deep Purple, Emerald, White/Parchment */
+    --background: 270 40% 8%;
+    --foreground: 60 20% 95%;
+
+    --card: 270 35% 12%;
+    --card-foreground: 60 20% 95%;
+
+    --popover: 270 35% 15%;
+    --popover-foreground: 60 20% 95%;
+
+    --primary: 270 50% 20%;
+    --primary-foreground: 60 20% 95%;
+
+    --secondary: 160 84% 39%;
+    --secondary-foreground: 270 40% 8%;
+
+    --muted: 270 30% 18%;
+    --muted-foreground: 270 15% 60%;
+
+    --accent: 160 84% 39%;
+    --accent-foreground: 270 40% 8%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 60 20% 95%;
+
+    --border: 270 30% 25%;
+    --input: 270 30% 20%;
+    --ring: 160 84% 39%;
+
+    --radius: 0.5rem;
+
+    /* Custom tokens */
+    --parchment: 45 30% 90%;
+    --parchment-dark: 40 25% 82%;
+    --scroll-shadow: 270 50% 5%;
+    --circuit-glow: 160 84% 50%;
+    --deep-purple: 270 50% 20%;
+    --emerald: 160 84% 39%;
+
+    /* Sidebar tokens */
+    --sidebar-background: 270 40% 10%;
+    --sidebar-foreground: 60 20% 95%;
+    --sidebar-primary: 160 84% 39%;
+    --sidebar-primary-foreground: 270 40% 8%;
+    --sidebar-accent: 270 35% 18%;
+    --sidebar-accent-foreground: 60 20% 95%;
+    --sidebar-border: 270 30% 25%;
+    --sidebar-ring: 160 84% 39%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Noto Serif', serif;
+    font-weight: 400;
+  }
+}
+
+@layer components {
+  /* Scroll container - parchment style */
+  .scroll-container {
+    @apply relative;
+    background: linear-gradient(
+      180deg,
+      hsl(var(--parchment)) 0%,
+      hsl(var(--parchment-dark)) 100%
+    );
+    border-radius: 4px;
+    box-shadow: 
+      0 4px 20px hsl(var(--scroll-shadow) / 0.5),
+      inset 0 1px 0 hsl(60 20% 98% / 0.3);
+  }
+
+  .scroll-container::before,
+  .scroll-container::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(90deg, 
+      hsl(var(--deep-purple)) 0%, 
+      hsl(270 50% 30%) 50%, 
+      hsl(var(--deep-purple)) 100%
+    );
+    border-radius: 10px;
+    box-shadow: 0 2px 8px hsl(var(--scroll-shadow) / 0.4);
+  }
+
+  .scroll-container::before {
+    top: -10px;
+  }
+
+  .scroll-container::after {
+    bottom: -10px;
+  }
+
+  /* Circuit glow button */
+  .circuit-btn {
+    @apply relative overflow-hidden transition-all duration-300;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--emerald)) 0%,
+      hsl(160 84% 30%) 100%
+    );
+    box-shadow: 
+      0 0 20px hsl(var(--circuit-glow) / 0.3),
+      0 4px 15px hsl(var(--scroll-shadow) / 0.3);
+  }
+
+  .circuit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(160 84% 70% / 0.4) 50%,
+      transparent 100%
+    );
+    transition: left 0.5s ease;
+  }
+
+  .circuit-btn:hover::before {
+    left: 100%;
+  }
+
+  .circuit-btn:hover {
+    box-shadow: 
+      0 0 30px hsl(var(--circuit-glow) / 0.5),
+      0 6px 20px hsl(var(--scroll-shadow) / 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Circuit trace decoration */
+  .circuit-trace {
+    background-image: 
+      linear-gradient(90deg, hsl(var(--emerald) / 0.2) 1px, transparent 1px),
+      linear-gradient(hsl(var(--emerald) / 0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Lesson card styles */
+  .lesson-card {
+    @apply relative p-6 rounded-lg transition-all duration-300;
+    background: linear-gradient(
+      145deg,
+      hsl(var(--card)) 0%,
+      hsl(270 35% 10%) 100%
+    );
+    border: 1px solid hsl(var(--border));
+  }
+
+  .lesson-card:hover {
+    border-color: hsl(var(--emerald) / 0.5);
+    box-shadow: 0 0 20px hsl(var(--emerald) / 0.1);
+  }
+
+  .lesson-card.completed {
+    border-color: hsl(var(--emerald));
+    background: linear-gradient(
+      145deg,
+      hsl(160 30% 12%) 0%,
+      hsl(160 20% 8%) 100%
+    );
+  }
+
+  /* Status badges */
+  .status-not-started {
+    @apply text-muted-foreground;
+  }
+
+  .status-in-progress {
+    @apply text-yellow-400;
+  }
+
+  .status-completed {
+    @apply text-secondary;
+  }
+}
+
+@layer utilities {
+  .text-parchment {
+    color: hsl(var(--parchment));
+  }
+
+  .bg-parchment {
+    background-color: hsl(var(--parchment));
+  }
+
+  .glow-emerald {
+    text-shadow: 0 0 10px hsl(var(--emerald) / 0.5);
+  }
+}
