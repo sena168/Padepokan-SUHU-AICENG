@@ -22,6 +22,13 @@ interface LessonContextType {
   lessons: Lesson[];
   updateLessonStatus: (id: string, status: Lesson['status']) => void;
   completeLesson: (id: string) => void;
+  getProgressStats: () => {
+    completed: number;
+    inProgress: number;
+    notStarted: number;
+    total: number;
+    percentage: number;
+  };
 }
 
 const initialLessons: Lesson[] = [
@@ -112,9 +119,25 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     updateLessonStatus(id, 'completed');
   };
 
+  const getProgressStats = () => {
+    const completed = lessons.filter((l) => l.status === 'completed').length;
+    const inProgress = lessons.filter((l) => l.status === 'in-progress').length;
+    const notStarted = lessons.filter((l) => l.status === 'not-started').length;
+    const total = lessons.length;
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    return {
+      completed,
+      inProgress,
+      notStarted,
+      total,
+      percentage,
+    };
+  };
+
   return (
     <LessonContext.Provider
-      value={{ lessons, updateLessonStatus, completeLesson }}
+      value={{ lessons, updateLessonStatus, completeLesson, getProgressStats }}
     >
       {children}
     </LessonContext.Provider>

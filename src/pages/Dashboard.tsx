@@ -44,6 +44,32 @@ const Dashboard = () => {
             <p className='text-muted-foreground'>
               Pilih salah satu kitab untuk melanjutkan perjalananmu.
             </p>
+
+            {/* Progress Statistics */}
+            <div className='mt-6 grid grid-cols-3 gap-4 max-w-md'>
+              <div className='text-center p-4 bg-secondary/10 rounded-lg'>
+                <div className='text-2xl font-bold text-primary'>
+                  {lessons.filter((l) => l.status === 'completed').length}
+                </div>
+                <div className='text-sm text-muted-foreground'>Selesai</div>
+              </div>
+              <div className='text-center p-4 bg-secondary/10 rounded-lg'>
+                <div className='text-2xl font-bold text-yellow-500'>
+                  {lessons.filter((l) => l.status === 'in-progress').length}
+                </div>
+                <div className='text-sm text-muted-foreground'>
+                  Dalam Proses
+                </div>
+              </div>
+              <div className='text-center p-4 bg-secondary/10 rounded-lg'>
+                <div className='text-2xl font-bold text-muted-foreground'>
+                  {lessons.filter((l) => l.status === 'not-started').length}
+                </div>
+                <div className='text-sm text-muted-foreground'>
+                  Belum Dimulai
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Lesson Catalog */}
