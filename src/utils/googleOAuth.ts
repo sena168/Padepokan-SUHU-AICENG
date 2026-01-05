@@ -24,22 +24,46 @@ export class GoogleOAuth {
   }
 
   static async exchangeCodeForToken(code: string): Promise<GoogleUser> {
-    // In a real implementation, this would call your backend
-    // For frontend-only implementation, we'll use a simplified approach
-    const response = await fetch(
+    // Exchange authorization code for access token
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: this.clientId,
+        client_secret: import.meta.env.VITE_GOOGLE_CLIENT_SECRET,
+        code: code,
+        grant_type: 'authorization_code',
+        redirect_uri: this.redirectUri,
+      }),
+    });
+
+    if (!tokenResponse.ok) {
+      const errorData = await tokenResponse.text();
+      throw new Error(
+        `Token exchange failed: ${tokenResponse.status} - ${errorData}`
+      );
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    // Fetch user info using the access token
+    const userResponse = await fetch(
       'https://www.googleapis.com/oauth2/v3/userinfo',
       {
         headers: {
-          Authorization: `Bearer ${code}`, // Simplified - in real app, exchange code for token
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
 
-    if (!response.ok) {
+    if (!userResponse.ok) {
       throw new Error('Failed to fetch user info');
     }
 
-    const userInfo = await response.json();
+    const userInfo = await userResponse.json();
     return {
       id: userInfo.sub,
       email: userInfo.email,

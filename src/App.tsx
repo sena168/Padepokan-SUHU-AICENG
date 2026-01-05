@@ -8,6 +8,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Index from './pages/Index';
 import Dashboard from './pages/Dashboard';
 import LessonPage from './pages/LessonPage';
+import GoogleCallback from './pages/GoogleCallback';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -24,6 +25,10 @@ const App = () => (
               <Route path='/' element={<Index />} />
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/lesson/:lessonId' element={<LessonPage />} />
+              <Route
+                path='/auth/google/callback'
+                element={<GoogleCallback />}
+              />
               <Route path='*' element={<NotFound />} />
             </Routes>
           </BrowserRouter>

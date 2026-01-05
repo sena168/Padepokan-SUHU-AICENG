@@ -112,20 +112,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       if (code) {
-        // In a real implementation, you would exchange the code for tokens
-        // For this demo, we'll create a mock Google user
-        const googleUser: User = {
-          id: `google-${Date.now()}`,
-          nickname: 'Google User',
-          email: 'google-user@example.com',
-          createdAt: new Date().toISOString(),
-          avatar: 'https://via.placeholder.com/150',
-          provider: 'google',
-        };
+        try {
+          // Exchange code for token and get real user info
+          const googleUserInfo = await GoogleOAuth.exchangeCodeForToken(code);
 
-        setUser(googleUser);
-        localStorage.setItem('padepokan_user', JSON.stringify(googleUser));
-        return true;
+          const googleUser: User = {
+            id: googleUserInfo.id,
+            nickname: googleUserInfo.name,
+            email: googleUserInfo.email,
+            createdAt: new Date().toISOString(),
+            avatar: googleUserInfo.picture,
+            provider: 'google',
+          };
+
+          setUser(googleUser);
+          localStorage.setItem('padepokan_user', JSON.stringify(googleUser));
+
+          // Clear the URL parameters to avoid re-triggering on refresh
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
+
+          return true;
+        } catch (error) {
+          console.error('Google OAuth token exchange failed:', error);
+          return false;
+        }
       }
 
       // If no code, initiate Google OAuth flow
